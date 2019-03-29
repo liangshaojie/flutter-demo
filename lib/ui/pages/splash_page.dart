@@ -35,10 +35,9 @@ class SplashPageState extends State<SplashPage> {
     await SpUtil.getInstance();
     _loadSplashData();
     Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
-//      SpUtil.putBool(Constant.KEY_GUIDE, false);
-      if (SpUtil.getBool(Constant.KEY_GUIDE) != true &&
-          ObjectUtil.isNotEmpty(_guideList)) {
-        SpUtil.putBool(Constant.KEY_GUIDE, true);
+      //判断是不是第一次用，如果是第一次，那么就去加载引导页，如果不是那么就去加载单页面广告
+      if (SpUtil.getBool(Constant.KEY_GUIDE) != true && ObjectUtil.isNotEmpty(_guideList)) {
+         SpUtil.putBool(Constant.KEY_GUIDE, true);
         _initBanner();
       } else {
         _initSplash();
@@ -108,7 +107,6 @@ class SplashPageState extends State<SplashPage> {
     }
   }
 
-
   void _doCountDown() {
     setState(() {
       _status = 1;
@@ -125,7 +123,6 @@ class SplashPageState extends State<SplashPage> {
     });
     _timerUtil.startCountDown();
   }
-
 
   void _loadSplashData() {
     _splashModel = SpHelper.getSplashModel();
@@ -185,9 +182,10 @@ class SplashPageState extends State<SplashPage> {
       height: double.infinity,
     );
   }
+
   void _goMain() {
     print("_goMain");
-   // Navigator.of(context).pushReplacementNamed('/MainPage');
+    // Navigator.of(context).pushReplacementNamed('/MainPage');
   }
 
   @override
@@ -204,14 +202,14 @@ class SplashPageState extends State<SplashPage> {
             child: ObjectUtil.isEmpty(_bannerList)
                 ? new Container()
                 : new Swiper(
-                autoStart: false,
-                circular: false,
-                indicator: CircleSwiperIndicator(
-                  radius: 4.0,
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  itemColor: Colors.black26,
-                ),
-                children: _bannerList),
+                    autoStart: false,
+                    circular: false,
+                    indicator: CircleSwiperIndicator(
+                      radius: 4.0,
+                      padding: EdgeInsets.only(bottom: 30.0),
+                      itemColor: Colors.black26,
+                    ),
+                    children: _bannerList),
           ),
           _buildAdWidget(),
           new Offstage(
