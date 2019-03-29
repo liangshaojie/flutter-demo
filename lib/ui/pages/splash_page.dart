@@ -185,7 +185,7 @@ class SplashPageState extends State<SplashPage> {
 
   void _goMain() {
     print("_goMain");
-    // Navigator.of(context).pushReplacementNamed('/MainPage');
+     Navigator.of(context).pushReplacementNamed('/MainPage');
   }
 
   @override
