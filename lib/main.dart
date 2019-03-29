@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/common/component_index.dart';
-
+import 'package:my_flutter_app/ui/pages/page_index.dart';
 void main() => runApp(BlocProvider<ApplicationBloc>(
   bloc: ApplicationBloc(),
-  child: BlocProvider(
-      child: MyApp(),
-      bloc: MainBloc()
-  ),
+  child: BlocProvider(child: MyApp(), bloc: MainBloc()),
 ));
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return MyAppState();
+  }
+}
+
+class MyAppState extends State<MyApp> {
+  Color _themeColor = Colours.app_main;
   @override
   Widget build(BuildContext context) {
-    print(AppConfig.version);
+    // TODO: implement build
     return MaterialApp(
-      title: 'Jspang Flutter Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('listview widget'),
-        ),
-        body: ListView(
-          children: <Widget>[
-            Image.network(
-                'http://jspang.com/static/upload/20181111/G-wj-ZQuocWlYOHM6MT2Hbh5.jpg'
-            ),
-            new Image.network(
-                'http://jspang.com/static/myimg/smile-vue.jpg'
-            )
-          ],
-        ),
+      home: new SplashPage(),
+      theme: ThemeData.light().copyWith(
+        primaryColor: _themeColor,
+        accentColor: _themeColor,
+        indicatorColor: Colors.white,
       ),
     );
   }
 }
+
+
