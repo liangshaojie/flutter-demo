@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/common/component_index.dart';
-//import 'package:my_flutter_app/ui/pages/main_left_page.dart';
+import 'package:my_flutter_app/ui/pages/main_left_page.dart';
 import 'package:my_flutter_app/ui/pages/page_index.dart';
 
 class _Page {
@@ -50,8 +50,7 @@ class MainPage extends StatelessWidget {
           ),
           body: new TabBarViewLayout(),
           drawer: new Drawer(
-            child: new Text('454545454545'),
-//            child: new MainLeftPage(),
+            child: new MainLeftPage(),
           ),
         ));
   }
@@ -105,9 +104,6 @@ class TabBarViewLayout extends StatelessWidget {
 class TabLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('--------------------------------------------12');
-    print( _allPages);
-    print('--------------------------------------------34');
     return new TabBar(
       isScrollable: true,
       labelPadding: EdgeInsets.all(12.0),
