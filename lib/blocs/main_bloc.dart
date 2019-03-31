@@ -190,8 +190,8 @@ class MainBloc implements BlocBase {
   }
 
   Future getHomeData(String labelId) {
-//    getRecRepos(labelId);
-//    getRecWxArticle(labelId);
+    getRecRepos(labelId);
+    getRecWxArticle(labelId);
     return getBanner(labelId);
   }
 

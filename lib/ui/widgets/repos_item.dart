@@ -62,7 +62,7 @@ class ReposItem extends StatelessWidget {
               )),
               new Container(
                 width: 72,
-                alignment: Alignment.center,
+                alignment: Alignment.bottomRight,
                 margin: EdgeInsets.only(left: 10.0),
                 child: new CachedNetworkImage(
                   width: 72,

@@ -25,9 +25,36 @@ class HomePage extends StatelessWidget {
       isHomeInit = false;
       Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
         bloc.onRefresh(labelId: labelId);
-//        bloc.getHotRecItem();
-//        bloc.getVersion();
+        bloc.getHotRecItem();
+        bloc.getVersion();
       });
+    }
+
+    Widget buildRepos(BuildContext context, List<ReposModel> list) {
+      if (ObjectUtil.isEmpty(list)) {
+        return new Container(height: 0.0);
+      }
+      List<Widget> _children = list.map((model) {
+        return new ReposItem(
+          model,
+          isHome: true,
+        );
+      }).toList();
+      List<Widget> children = new List();
+      children.add(new HeaderItem(
+        leftIcon: Icons.book,
+        titleId: Ids.recRepos,
+        onTap: () {
+          NavigatorUtil.pushTabPage(context,
+              labelId: Ids.titleReposTree, titleId: Ids.titleReposTree);
+        },
+      ));
+      children.addAll(_children);
+      return new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: children,
+      );
     }
 
     Widget buildBanner(BuildContext context, List<BannerModel> list) {
@@ -37,12 +64,15 @@ class HomePage extends StatelessWidget {
       return new AspectRatio(
         aspectRatio: 16.0 / 9.0,
         child: Swiper(
-          indicatorAlignment: AlignmentDirectional.topEnd,
+          indicatorAlignment: AlignmentDirectional.topEnd, //轮播指示符位置
           circular: true,
           interval: const Duration(seconds: 5),
           indicator: NumberSwiperIndicator(),
           children: list.map((model) {
-            return new InkWell(
+            return
+              new InkWell(
+              splashColor: Colors.white.withOpacity(0.3),
+              highlightColor: Colors.white.withOpacity(0.1),
               onTap: () {
                 LogUtil.e("BannerModel: " + model.toString());
                 NavigatorUtil.pushWeb(context,
@@ -60,7 +90,32 @@ class HomePage extends StatelessWidget {
       );
     }
 
-
+    Widget buildWxArticle(BuildContext context, List<ReposModel> list) {
+      if (ObjectUtil.isEmpty(list)) {
+        return new Container(height: 0.0);
+      }
+      List<Widget> _children = list.map((model) {
+        return new ArticleItem(
+          model,
+          isHome: true,
+        );
+      }).toList();
+      List<Widget> children = new List();
+      children.add(new HeaderItem(
+        titleColor: Colors.green,
+        leftIcon: Icons.library_books,
+        titleId: Ids.recWxArticle,
+        onTap: () {
+          NavigatorUtil.pushTabPage(context,
+              labelId: Ids.titleWxArticleTree, titleId: Ids.titleWxArticleTree);
+        },
+      ));
+      children.addAll(_children);
+      return new Column(
+        mainAxisSize: MainAxisSize.min,
+        children: children,
+      );
+    }
 
     return new StreamBuilder(
       stream: bloc.bannerStream,
@@ -70,12 +125,51 @@ class HomePage extends StatelessWidget {
             isLoading: snapshot.data == null,
             controller: _controller,
             enablePullUp: false,
-            onRefresh: () {
+            onRefresh: () {   //下拉刷新
               return bloc.onRefresh(labelId: labelId);
             },
             child: new ListView(
                 children: <Widget>[
+                  new StreamBuilder(
+                      stream: bloc.recItemStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<ComModel> snapshot) {
+                        ComModel model = bloc.hotRecModel;
+                        if (model == null) {
+                          return new Container(
+                            height: 0.0,
+                          );
+                        }
+                        int status = Utils.getUpdateStatus(model.version);
+                        return new HeaderItem(
+                          titleColor: Colors.redAccent,
+                          title: status == 0 ? model.content : model.title,
+                          extra: status == 0 ? 'Go' : "",
+                          onTap: () {
+                            if (status == 0) {
+//                              NavigatorUtil.pushPage(
+//                                  context, RecHotPage(title: model.content),
+//                                  pageName: model.content);
+                            } else {
+                              NavigatorUtil.launchInBrowser(model.url,
+                                  title: model.title);
+                            }
+                          },
+                        );
+                      }),
                   buildBanner(context, snapshot.data),
+                  new StreamBuilder(
+                      stream: bloc.recReposStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<ReposModel>> snapshot) {
+                        return buildRepos(context, snapshot.data);
+                      }),
+                  new StreamBuilder(
+                      stream: bloc.recWxArticleStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<ReposModel>> snapshot) {
+                        return buildWxArticle(context, snapshot.data);
+                      }),
                 ]
             )
           );
@@ -88,6 +182,7 @@ class HomePage extends StatelessWidget {
 class NumberSwiperIndicator extends SwiperIndicator {
   @override
   Widget build(BuildContext context, int index, int itemCount) {
+    print(index);
     return Container(
       decoration: BoxDecoration(
           color: Colors.black45, borderRadius: BorderRadius.circular(20.0)),

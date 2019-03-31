@@ -41,7 +41,7 @@ class RefreshScaffoldState extends State<RefreshScaffold>
   @override
   void initState() {
     super.initState();
-//    LogUtil.e("RefreshScaffold initState......" + widget.labelId);
+    LogUtil.e("RefreshScaffold initState......" + widget.labelId);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.controller.scrollController.addListener(() {
         int offset = widget.controller.scrollController.offset.toInt();
