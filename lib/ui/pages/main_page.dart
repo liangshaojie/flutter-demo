@@ -62,10 +62,7 @@ class TabBarViewLayout extends StatelessWidget {
     String labelId = page.labelId;
     switch (labelId) {
       case Ids.titleHome:
-        return Center(
-          child: Text('HomePage'),
-        );
-//        return HomePage(labelId: labelId);
+        return HomePage(labelId: labelId);
         break;
       case Ids.titleRepos:
         return Center(

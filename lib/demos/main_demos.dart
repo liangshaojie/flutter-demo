@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_app/utils/navigator_util.dart';
 import 'package:my_flutter_app/utils/util_index.dart';
 
+import './stream_demo.dart';
+
 class ItemModel {
   String title;
   Widget page;
@@ -22,11 +24,11 @@ class MainDemosPageState extends State<MainDemosPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("Flutter De4545"),
+        title: new Text("Flutter demo"),
         centerTitle: true,
       ),
       body:Center(
-        child: Text('Flutter'),
+        child: BlocDemo(),
       )
     );
   }
